@@ -107,8 +107,10 @@ class HIDRaw(object):
         """
         Send a feature report.
         """
-        buf = bytearray([report_num]) + bytearray(report)
-        length = len(buf)
+        length = len(report) + 1
+        buf = bytearray(length)
+        buf[0] = report_num
+        buf[1:] = report
         self._ioctl(
             _HIDIOCSFEATURE(length),
             (ctypes.c_char * length).from_buffer(buf),
